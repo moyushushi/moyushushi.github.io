@@ -1,6 +1,7 @@
 <script setup></script>
+
 <template>
-  <router-view />
+  <div class="welcome"></div>
 </template>
 
 <style scoped></style>
