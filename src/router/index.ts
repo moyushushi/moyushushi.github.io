@@ -4,7 +4,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "welcome",
-    component: () => import("@/views/WelcomeView.vue"),
+    component: () => import("@/views/HomeView.vue"),
   },
   // 可添加其他路由
 ];
