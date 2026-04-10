@@ -6,6 +6,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "welcome",
     component: () => import("@/views/HomeView.vue"),
   },
+  {
+    path: "/liquid-glass",
+    name: "LiquidGlass",
+    component: () => import("../views/LiquidGlassPage.vue"),
+  },
   // 可添加其他路由
 ];
 

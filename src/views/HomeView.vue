@@ -65,9 +65,20 @@
             :src="currentArticle.imgUrl"
             alt="文章封面"
             class="article-img"
+            loading="lazy"
           />
           <h2 class="article-title">{{ currentArticle.title }}</h2>
           <div class="article-desc">{{ currentArticle.content }}</div>
+
+          <!-- 只有【液态玻璃】显示跳转按钮 -->
+          <button
+            v-if="currentArticle.title === '液态玻璃'"
+            class="jump-btn"
+            @click="$router.push('/liquid-glass')"
+          >
+            前往液态玻璃页面
+          </button>
+
           <button class="close-btn" @click="closeArticle">关闭</button>
         </div>
       </div>
@@ -103,9 +114,9 @@ const floatItems = ref([
     content: "手势灾害识别系统介绍",
   },
   {
-    title: "文章3",
+    title: "液态玻璃",
     imgUrl: test1,
-    content: "内容3",
+    content: "点击前往液态玻璃效果页面",
   },
   {
     title: "文章4",
@@ -157,10 +168,15 @@ const openArticle = (item, index) => {
   if (isClicking.value) return;
   isClicking.value = true;
   activeIndex.value = index;
+
   currentArticle.value = item;
   visibleArticle.value = true;
   document.body.style.overflow = "hidden";
-  setTimeout(() => (isClicking.value = false), 300);
+
+  setTimeout(() => {
+    isClicking.value = false;
+    activeIndex.value = -1;
+  }, 300);
 };
 
 const closeArticle = () => {
@@ -195,6 +211,21 @@ const goBack = () => (showPersonal.value = false);
 </script>
 
 <style scoped>
+.jump-btn {
+  display: block;
+  margin: 0 auto 16px auto;
+  padding: 10px 24px;
+  background: #409eff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+}
+.jump-btn:hover {
+  background: #66b1ff;
+}
+
 .container {
   width: 100vw;
   height: 100vh;
