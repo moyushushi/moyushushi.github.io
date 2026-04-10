@@ -1,5 +1,11 @@
 <template>
   <div class="container">
+    <!-- 带方框的时钟 -->
+    <div class="clock-box">
+      <div class="clock-time">{{ currentTime }}</div>
+      <div class="clock-date">{{ currentDate }}</div>
+    </div>
+
     <!-- 中间圆形头像框 -->
     <div class="avatar-container">
       <img
@@ -10,7 +16,7 @@
       />
     </div>
 
-    <!-- 抽屉式悬浮框容器：修复鼠标跳动bug -->
+    <!-- 抽屉式悬浮框容器 -->
     <div
       class="drawer-container"
       @mouseenter="openDrawer"
@@ -60,23 +66,24 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
+import myAvatar from "@/assets/my-avatar.png";
 
 // 头像配置
-const avatarUrl = ref("https://picsum.photos/200/200");
+const avatarUrl = ref(myAvatar);
 const handleAvatarError = (e) => {
-  e.target.src = "https://picsum.photos/200/200";
+  e.target.src = myAvatar;
 };
 
 // 悬浮方框数据
 const floatItems = ref([
   {
-    title: "文章1",
+    title: "登录系统",
     imgUrl: "https://picsum.photos/150/150?1",
     content: "这是文章1的详细内容，点击方框后放大显示～",
   },
   {
-    title: "文章2",
+    title: "手势灾害系统",
     imgUrl: "https://picsum.photos/150/150?2",
     content: "这是文章2的详细内容，支持自定义文本和图片～",
   },
@@ -105,15 +112,40 @@ const activeIndex = ref(-1);
 // 抽屉展开状态
 const isDrawerOpen = ref(false);
 
-/**
- * 打开文章弹窗
- * @param {Object} item - 文章数据
- * @param {number} index - 索引值
- */
+// 时钟数据
+const currentTime = ref("");
+const currentDate = ref("");
+let timer = null;
+
+// 更新时间
+const updateTime = () => {
+  const now = new Date();
+  currentTime.value = now.toLocaleTimeString("zh-CN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+  const week = ["日", "一", "二", "三", "四", "五", "六"][now.getDay()];
+  currentDate.value = `${now.getFullYear()}-${(now.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${now
+    .getDate()
+    .toString()
+    .padStart(2, "0")} 星期${week}`;
+};
+
+onMounted(() => {
+  updateTime();
+  timer = setInterval(updateTime, 1000);
+});
+
+onUnmounted(() => {
+  if (timer) clearInterval(timer);
+});
+
+// 打开文章弹窗
 const openArticle = (item, index) => {
-  if (isClicking.value) {
-    return;
-  }
+  if (isClicking.value) return;
   isClicking.value = true;
   activeIndex.value = index;
   currentArticle.value = item;
@@ -126,9 +158,7 @@ const openArticle = (item, index) => {
   }, 300);
 };
 
-/**
- * 关闭文章弹窗
- */
+// 关闭文章弹窗
 const closeArticle = () => {
   visibleArticle.value = false;
   setTimeout(() => {
@@ -136,25 +166,17 @@ const closeArticle = () => {
   }, 300);
 };
 
-/**
- * 打开抽屉
- */
+// 打开抽屉
 const openDrawer = () => {
   isDrawerOpen.value = true;
 };
 
-/**
- * 关闭抽屉
- */
+// 关闭抽屉
 const closeDrawer = () => {
   isDrawerOpen.value = false;
 };
 
-/**
- * 获取抽屉位置
- * @param {number} index - 索引值
- * @returns {Object} 位置样式
- */
+// 获取抽屉位置
 const getDrawerPosition = (index) => {
   const closePos = {
     top: "15%",
@@ -162,12 +184,7 @@ const getDrawerPosition = (index) => {
     transform: "translate(0, 0)",
   };
   const openPositions = [
-    {
-      top: "15%",
-      left: "10%",
-      transform: "translate(0, 0)",
-      zIndex: "14",
-    },
+    { top: "15%", left: "10%", transform: "translate(0, 0)", zIndex: "14" },
     {
       top: "15%",
       left: "calc(10% + 160px)",
@@ -190,11 +207,7 @@ const getDrawerPosition = (index) => {
   return isDrawerOpen.value ? openPositions[index] : closePos;
 };
 
-/**
- * 合并抽屉样式
- * @param {number} index - 索引值
- * @returns {Object} 合并后的样式
- */
+// 合并抽屉样式
 const mergeDrawerStyle = (index) => {
   return {
     ...getDrawerPosition(index),
@@ -203,7 +216,6 @@ const mergeDrawerStyle = (index) => {
 };
 </script>
 
-<!-- scoped样式：组件内部元素 -->
 <style scoped>
 /* 全局容器 */
 .container {
@@ -212,6 +224,32 @@ const mergeDrawerStyle = (index) => {
   overflow: hidden;
   position: relative;
   background-color: #f9f6e7;
+}
+
+/* 时钟方框 */
+.clock-box {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  z-index: 5;
+}
+
+.clock-time {
+  font-size: 28px;
+  font-weight: 500;
+  color: #409eff;
+  margin-bottom: 4px;
+}
+
+.clock-date {
+  font-size: 13px;
+  color: #666;
 }
 
 /* 中间圆形头像 */
@@ -237,7 +275,7 @@ const mergeDrawerStyle = (index) => {
   transform: scale(1.05);
 }
 
-/* 抽屉容器：修复鼠标跳动 */
+/* 抽屉容器 */
 .drawer-container {
   position: absolute;
   z-index: 10;
@@ -247,7 +285,7 @@ const mergeDrawerStyle = (index) => {
   height: calc(2 * 190px);
 }
 
-/* 抽屉式悬浮方框 */
+/* 悬浮方框 */
 .float-box {
   position: absolute;
   width: 150px;
@@ -258,7 +296,7 @@ const mergeDrawerStyle = (index) => {
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  will-change: transform, box-shadow, left, top;
+  will-change: transform;
 }
 
 .float-box:hover {
@@ -271,7 +309,6 @@ const mergeDrawerStyle = (index) => {
   box-shadow: 0 8px 24px rgba(64, 158, 255, 0.3);
 }
 
-/* 方框内部样式 */
 .box-img {
   width: 100%;
   height: 120px;
@@ -294,7 +331,6 @@ const mergeDrawerStyle = (index) => {
 }
 </style>
 
-<!-- 非scoped样式：弹窗动画 -->
 <style>
 /* 弹窗遮罩层 */
 .article-modal {
@@ -322,7 +358,7 @@ const mergeDrawerStyle = (index) => {
   opacity: 0;
 }
 
-/* 弹窗内容区 */
+/* 弹窗内容 */
 .article-content {
   width: 80%;
   max-width: 600px;
@@ -340,14 +376,12 @@ const mergeDrawerStyle = (index) => {
   transform: scale(1);
 }
 
-/* 弹窗内部元素 */
 .article-img {
   width: 100%;
   height: 300px;
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 16px;
-  transition: opacity 0.3s ease;
 }
 
 .article-title {
@@ -366,7 +400,6 @@ const mergeDrawerStyle = (index) => {
   animation: contentFade 0.5s ease;
 }
 
-/* 关闭按钮 */
 .close-btn {
   display: block;
   margin: 0 auto;
@@ -388,7 +421,6 @@ const mergeDrawerStyle = (index) => {
   transform: scale(0.98);
 }
 
-/* 文字渐入动画 */
 @keyframes titleFade {
   from {
     opacity: 0;
