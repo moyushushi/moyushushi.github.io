@@ -80,6 +80,8 @@ import { ref, onMounted, onUnmounted } from "vue";
 import myAvatar from "@/assets/my-avatar.png";
 import aLogin from "@/assets/login.png";
 import aSystem from "@/assets/asystem.png";
+import test1 from "@/assets/test1.png";
+import test2 from "@/assets/test2.png";
 import PersonalPage from "./PersonalPage.vue";
 
 // 头像
@@ -102,12 +104,12 @@ const floatItems = ref([
   },
   {
     title: "文章3",
-    imgUrl: "https://picsum.photos/150/150?3",
+    imgUrl: test1,
     content: "内容3",
   },
   {
     title: "文章4",
-    imgUrl: "https://picsum.photos/150/150?4",
+    imgUrl: test2,
     content: "内容4",
   },
 ]);
