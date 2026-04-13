@@ -1,0 +1,15 @@
+<!-- public/404.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Redirecting...</title>
+    <script>
+        // 将当前路径保存到 sessionStorage，然后跳回 index.html
+        sessionStorage.setItem('redirectPath', location.pathname + location.search + location.hash);
+        location.replace('/index.html');
+    </script>
+</head>
+<body></body>
+</html>
