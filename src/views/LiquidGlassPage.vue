@@ -70,13 +70,13 @@
 
           <div class="bar-content">
             <img
-              src="https://workos.imgix.net/images/d2e1f2a4-5994-4f38-b3f4-0c78c946b616.png?auto=format&fit=clip&q=80&w=500"
+              :src="bq"
               alt=""
               style="width: 32px; height: 32px; border-radius: 5px"
             />
             <div class="info">
-              <p>Konoyo</p>
-              <p>Tim Hecker</p>
+              <p>OvO</p>
+              <p>ciallo</p>
             </div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -130,7 +130,7 @@
 
 <script setup>
 import { ref, onMounted, onActivated } from "vue";
-
+import bq from "@/assets/bq.png";
 // 获取图片的真实路径（Vite 推荐方式）
 // 请根据您实际存放图片的路径修改，例如图片位于 src/assets/ct.png
 const getImageUrl = () => {
