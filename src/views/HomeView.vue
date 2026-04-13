@@ -26,7 +26,7 @@
     <!-- 个人主页 -->
     <PersonalPage v-if="showPersonal" />
 
-    <!-- 抽屉悬浮框（只在主界面显示） -->
+    <!-- 抽屉悬浮框 -->
     <div
       v-if="!showPersonal"
       class="drawer-container"
@@ -70,7 +70,7 @@
           <h2 class="article-title">{{ currentArticle.title }}</h2>
           <div class="article-desc">{{ currentArticle.content }}</div>
 
-          <!-- 只有【液态玻璃】显示跳转按钮 -->
+          <!-- 【液态玻璃】显示跳转按钮 -->
           <button
             v-if="currentArticle.title === '液态玻璃'"
             class="jump-btn"
